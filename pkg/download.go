@@ -44,7 +44,7 @@ func DownloadModRelease(release *models.Release) error {
 	path := viper.GetString("factorioPath")
 	url := fmt.Sprintf("https://mods.factorio.com%s?username=%s&token=%s", release.DownloadURL, user, token)
 
-	out, err := os.Create(filepath.Join(path, release.FileName))
+	out, err := os.Create(filepath.Join(path, "mods", release.FileName))
 	if err != nil {
 		return err
 	}
