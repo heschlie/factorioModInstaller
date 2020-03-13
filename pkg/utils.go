@@ -22,6 +22,10 @@ func (v *FactorioVersion) String() string{
 	return fmt.Sprintf("%d.%d.%d", v.Major, v.Minor, v.Point)
 }
 
+func (v *FactorioVersion) GetModString() string {
+	return fmt.Sprintf("%d.%d", v.Major, v.Minor)
+}
+
 func GetFactorioVersion() (FactorioVersion, error) {
 	r := regexp.MustCompile(pattern)
 

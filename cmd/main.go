@@ -28,21 +28,35 @@ var rootCmd = &cobra.Command{
 	Long: "Installs or upgrades all mods listed in the mods section of the config. It will try to verify the Factorio" +
 		"version by checking the binary, alternatively you can pass it in with --f-version 0.15",
 	Run: func(cmd *cobra.Command, args []string) {
+		mods := viper.GetStringSlice("mods")
 		version, err := cmd.PersistentFlags().GetString("f-version")
-		//fPath := viper.GetString("factorioPath")
 		if err != nil {
 			log.WithError(err).Warn("Failed to parse --f-version")
 		}
+
 		if version == "" {
-
+			v, err := pkg.GetFactorioVersion()
+			if err != nil {
+				log.WithError(err).Fatal("Unknow Factorio version")
+			}
+			version = v.GetModString()
 		}
+		log.Infof("Factorio version is %s", version)
 
-		mods := viper.GetStringSlice("mods")
+		// Download our mods, only warn if it could not be downloaded.
 		for _, mod := range mods {
-			log.Infof("Finding latest version of %s for Factorio %s", mod, )
+			log.Infof("Finding latest version of %s for Factorio %s", mod, version)
 			m := pkg.GetReleaseMeta(mod)
-			r, _ := m.GetLatestReleaseByVersion("0.17")
-			log.Infof("%s: %s", m.Name, r.DownloadURL)
+			r, err := m.GetLatestReleaseByVersion(version)
+			if err != nil {
+				log.WithError(err).Warnf("Failed to find compatible version for %s and Factorio %s", mod, version)
+			} else {
+				err := pkg.DownloadModRelease(r)
+				if err != nil {
+					log.WithError(err).Warnf("Failed to download %s", r.FileName)
+				}
+				log.Infof("Downloaded %s", m.Name)
+			}
 		}
 	},
 }

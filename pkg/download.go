@@ -41,7 +41,7 @@ func GetReleaseMeta(name string) *models.Mod {
 func DownloadModRelease(release *models.Release) error {
 	user := viper.GetString("username")
 	token := viper.GetString("token")
-	path := viper.GetString("path")
+	path := viper.GetString("factorioPath")
 	url := fmt.Sprintf("https://mods.factorio.com%s?username=%s&token=%s", release.DownloadURL, user, token)
 
 	out, err := os.Create(filepath.Join(path, release.FileName))
