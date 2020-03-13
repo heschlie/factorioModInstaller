@@ -2,11 +2,21 @@ package main
 
 import (
 	"factorioModInstaller/pkg"
+	log "github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
+	"path/filepath"
 )
 
 func main() {
-	mod := pkg.GetReleaseMeta("long-reach")
+	//err := cmd.Execute()
+	//if err != nil {
+	//	log.WithError(err).Error("Encountered error running command")
+	//}
+	viper.SetDefault("mods", []string{})
+	viper.SetDefault("factorioPath", filepath.Join("/home/heschlie/Downloads/factorio_headless_x64_0.17.79/factorio"))
 
-	release, _ := mod.GetLatestReleaseByVersion("0.17")
-	pkg.DownloadModRelease(release)
+	viper.ReadInConfig()
+
+	v, _ := pkg.GetFactorioVersion()
+	log.Info(v.String())
 }
