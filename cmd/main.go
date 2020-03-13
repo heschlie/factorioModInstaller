@@ -55,7 +55,7 @@ var rootCmd = &cobra.Command{
 				if err != nil {
 					log.WithError(err).Warnf("Failed to download %s", r.FileName)
 				}
-				log.Infof("Downloaded %s", m.Name)
+				log.Infof("Downloaded %s (%s)", m.Name, r.Version)
 			}
 		}
 	},
