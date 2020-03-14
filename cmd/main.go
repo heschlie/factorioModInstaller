@@ -18,7 +18,7 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	rootCmd.PersistentFlags().StringVar(&configPath, "config",
-		filepath.Join("opt", "factorio", "mod-install.yaml"), "config file, default is /opt/factorio/mod-install.yaml")
+		filepath.Join("/opt", "factorio", "mod-install.yaml"), "config file, default is /opt/factorio/mod-install.yaml")
 	rootCmd.PersistentFlags().StringP("f-version", "f", "", "force Factorio version")
 }
 
@@ -64,7 +64,7 @@ var rootCmd = &cobra.Command{
 func initConfig() {
 	viper.SetConfigFile(configPath)
 	viper.SetDefault("mods", []string{})
-	viper.SetDefault("factorioPath", filepath.Join("opt", "factorio"))
+	viper.SetDefault("factorioPath", filepath.Join("/opt", "factorio"))
 
 	err := viper.ReadInConfig()
 	if err != nil {
